@@ -13,6 +13,7 @@ pipeline {
     }
 
     stages {
+
         stage('Read version') {
             steps {
                 script {
@@ -24,11 +25,11 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Install Dependencies') {
             steps {
                 script {
                     sh """
-                        echo "Hello, this is test"
+                        npm install
                     """
                 }
             }
@@ -49,6 +50,7 @@ pipeline {
 
         stage('Parallel Stages') {
             parallel {
+
                 stage('STAGE-1') {
                     steps {
                         script {
@@ -70,6 +72,7 @@ pipeline {
                         }
                     }
                 }
+
             }
         }
     }
