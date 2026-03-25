@@ -5,7 +5,7 @@ pipeline {
         PROJECT   = 'EXPENSE'
         COMPONENT = 'BACKEND'
         DEPLOY_TO = 'production'
-        ACC_ID    = '1xxx2'
+        ACC_ID    = '625981588289'
         APP_VERSION = ''
     }
 
