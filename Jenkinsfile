@@ -5,7 +5,8 @@ pipeline {
         PROJECT   = 'EXPENSE'
         COMPONENT = 'BACKEND'
         DEPLOY_TO = 'production'
-        ACC_ID    = '625981588289'
+        ACC_ID    = '1xxx2'
+        APP_VERSION = ''
     }
 
     options {
@@ -19,8 +20,9 @@ pipeline {
             steps {
                 script {
                     def packageJson = readJSON file: 'package.json'
-                    def appVersion = packageJson.version
-                    echo "Version is: ${appVersion}"
+                    APP_VERSION = packageJson.version
+                    env.APP_VERSION = APP_VERSION
+                    echo "Version is: ${env.APP_VERSION}"
                 }
             }
         }
@@ -31,12 +33,16 @@ pipeline {
             }
         }
 
-        stage('Docker Login (ECR)') {
+        stage('Docker Build & Push (ECR)') {
             steps {
                 withAWS(region: 'ap-south-1', credentials: 'aws-creds') {
                     sh """
                         aws ecr get-login-password --region ap-south-1 | \
                         docker login --username AWS --password-stdin ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com
+
+                        docker build -t ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com/${PROJECT}/${COMPONENT}:${APP_VERSION} .
+
+                        docker push ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com/${PROJECT}/${COMPONENT}:${APP_VERSION}
                     """
                 }
             }
@@ -68,7 +74,7 @@ pipeline {
 
     post {
         always {
-            echo 'I will always say Hiello again!'
+            echo 'I will always say Hello again!'
             deleteDir()
         }
         failure {
