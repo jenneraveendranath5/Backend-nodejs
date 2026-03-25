@@ -21,7 +21,7 @@ pipeline {
             steps {
                script{
                  sh """
-                    echo "Hello, thi is build"
+                    echo "Hello, this is build"
                     echo "Project: $PROJECT"
                     echo "Hello ${params.PERSON}"
 
