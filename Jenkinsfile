@@ -53,7 +53,7 @@ pipeline {
                     steps {
                         sh '''
                             echo "Hello, this is STAGE-1"
-                            sleep 10
+                            sleep 11
                         '''
                     }
                 }
