@@ -2,8 +2,8 @@ pipeline {
     agent { label 'Agent-1' }
 
     environment {
-        PROJECT     = 'expense'     // ✅ lowercase
-        COMPONENT   = 'backend'     // ✅ lowercase
+        PROJECT     = 'expense'
+        COMPONENT   = 'backend'
         DEPLOY_TO   = 'production'
         ACC_ID      = '625981588289'
         APP_VERSION = ''
@@ -39,9 +39,9 @@ pipeline {
                         aws ecr get-login-password --region ap-south-1 | \
                         docker login --username AWS --password-stdin ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com
 
-                        docker build -t ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com/${PROJECT}/${COMPONENT}:${APP_VERSION} .
+                        docker build -t ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com/${PROJECT}/${COMPONENT}:${env.APP_VERSION} .
 
-                        docker push ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com/${PROJECT}/${COMPONENT}:${APP_VERSION}
+                        docker push ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com/${PROJECT}/${COMPONENT}:${env.APP_VERSION}
                     """
                 }
             }
