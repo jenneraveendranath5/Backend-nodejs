@@ -2,9 +2,10 @@ pipeline {
     agent { label 'Agent-1' }
 
     environment {
-        PROJECT = 'EXPENSE'
+        PROJECT   = 'EXPENSE'
         COMPONENT = 'BACKEND'
-        DEPLOY_TO = "production"
+        DEPLOY_TO = 'production'
+        ACC_ID    = '625981588289'
     }
 
     options {
@@ -19,28 +20,23 @@ pipeline {
                 script {
                     def packageJson = readJSON file: 'package.json'
                     def appVersion = packageJson.version
-
-                    echo "version is: ${appVersion}"
+                    echo "Version is: ${appVersion}"
                 }
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                script {
-                    sh """
-                        npm install
-                    """
-                }
+                sh 'npm install'
             }
         }
 
-        stage('Docker Build') {
-
+        stage('Docker Login (ECR)') {
             steps {
-                script {
+                withAWS(region: 'ap-south-1', credentials: 'aws-creds') {
                     sh """
-                        docker build -t backend:v1.0.0 .
+                        aws ecr get-login-password --region ap-south-1 | \
+                        docker login --username AWS --password-stdin ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com
                     """
                 }
             }
@@ -51,26 +47,21 @@ pipeline {
 
                 stage('STAGE-1') {
                     steps {
-                        script {
-                            sh """
-                                echo "Hello, this is STAGE-1"
-                                sleep 15
-                            """
-                        }
+                        sh """
+                            echo "Hello, this is STAGE-1"
+                            sleep 15
+                        """
                     }
                 }
 
                 stage('STAGE-2') {
                     steps {
-                        script {
-                            sh """
-                                echo "Hello, this is STAGE-2"
-                                sleep 15
-                            """
-                        }
+                        sh """
+                            echo "Hello, this is STAGE-2"
+                            sleep 15
+                        """
                     }
                 }
-
             }
         }
     }
@@ -81,10 +72,10 @@ pipeline {
             deleteDir()
         }
         failure {
-            echo 'I will run when pipeline is failed'
+            echo 'Pipeline failed'
         }
         success {
-            echo 'I will run when pipeline is success'
+            echo 'Pipeline succeeded'
         }
     }
 }
