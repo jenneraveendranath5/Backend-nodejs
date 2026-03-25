@@ -19,7 +19,7 @@ pipeline {
         stage('Read version') {
             steps {
                 script {
-                    def packageJson = readJSON file: 'package.json'
+                    def packageJson = readJSON file: 'Backend-nodejs/package.json'
                     env.APP_VERSION = packageJson.version
                     echo "Version is: ${env.APP_VERSION}"
                 }
