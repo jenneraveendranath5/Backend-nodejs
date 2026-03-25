@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     // ✅ Correct path to package.json inside repo folder
-                    def packageJson = readJSON file: 'Backend-nodejs/package.json'
+                    def packageJson = readJSON file: 'package.json'
                     env.APP_VERSION = packageJson.version
                     echo "Version is: ${env.APP_VERSION}"
                 }
