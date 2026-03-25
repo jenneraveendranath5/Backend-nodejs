@@ -19,8 +19,8 @@ pipeline {
         stage('Read version') {
             steps {
                 script {
-                    // ✅ Correct path to package.json inside repo folder
-                    def packageJson = readJSON file: 'package.json'
+                    // ✅ Read from correct folder
+                    def packageJson = readJSON file: 'Backend-Nodejs/package.json'
                     env.APP_VERSION = packageJson.version
                     echo "Version is: ${env.APP_VERSION}"
                 }
@@ -30,7 +30,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                    cd Backend-nodejs
+                    cd Backend-Nodejs
                     npm install
                 '''
             }
@@ -43,7 +43,7 @@ pipeline {
                         aws ecr get-login-password --region ap-south-1 | \
                         docker login --username AWS --password-stdin ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com
 
-                        docker build -t ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com/${PROJECT}/${COMPONENT}:${APP_VERSION} Backend-nodejs
+                        docker build -t ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com/${PROJECT}/${COMPONENT}:${APP_VERSION} Backend-Nodejs
 
                         docker push ${ACC_ID}.dkr.ecr.ap-south-1.amazonaws.com/${PROJECT}/${COMPONENT}:${APP_VERSION}
                     """
