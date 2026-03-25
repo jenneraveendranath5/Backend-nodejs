@@ -35,14 +35,12 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            when {
-                environment name: 'DEPLOY_TO', value: 'production'
-            }
+        stage('Docker Build') {
+
             steps {
                 script {
                     sh """
-                        echo "Hello, this is deploy"
+                        docker build -t backend:v1.0.0 .
                     """
                 }
             }
