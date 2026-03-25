@@ -2,10 +2,10 @@ pipeline {
     agent { label 'Agent-1' }
 
     environment {
-        PROJECT   = 'EXPENSE'
-        COMPONENT = 'BACKEND'
-        DEPLOY_TO = 'production'
-        ACC_ID    = '625981588289'
+        PROJECT     = 'expense'     // ✅ lowercase
+        COMPONENT   = 'backend'     // ✅ lowercase
+        DEPLOY_TO   = 'production'
+        ACC_ID      = '625981588289'
         APP_VERSION = ''
     }
 
@@ -20,8 +20,7 @@ pipeline {
             steps {
                 script {
                     def packageJson = readJSON file: 'package.json'
-                    APP_VERSION = packageJson.version
-                    env.APP_VERSION = APP_VERSION
+                    env.APP_VERSION = packageJson.version
                     echo "Version is: ${env.APP_VERSION}"
                 }
             }
@@ -50,22 +49,21 @@ pipeline {
 
         stage('Parallel Stages') {
             parallel {
-
                 stage('STAGE-1') {
                     steps {
-                        sh """
+                        sh '''
                             echo "Hello, this is STAGE-1"
                             sleep 15
-                        """
+                        '''
                     }
                 }
 
                 stage('STAGE-2') {
                     steps {
-                        sh """
+                        sh '''
                             echo "Hello, this is STAGE-2"
                             sleep 15
-                        """
+                        '''
                     }
                 }
             }
